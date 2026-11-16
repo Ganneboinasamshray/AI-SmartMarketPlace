@@ -1,0 +1,39 @@
+# AI SMART MARKETPLACE: AUTOMATED & FUNCTIONAL TEST EXECUTION REPORT
+
+**Date of Execution**: November 2026  
+**Environment**: Windows 11 Enterprise (x86_64), Node.js v24.12, Python 3.12.10, Next.js 14, FastAPI 0.109  
+**Overall Execution Status**: 12/12 Test Cases Passed (100% Pass Rate)  
+**Average Functional Latency**: 38.0 ms  
+
+## Functional Test Matrix
+
+| Test ID | Test Scenario | Input Data | Expected Output | Actual Output | Status | Latency |
+|---|---|---|---|---|---|---|
+| T01 | Farmer Authentication & Role Transition | Mallesh Goud credentials | Next.js routes to Farmer Dashboard | Routed to Farmer Dashboard | **PASSED** | 42ms |
+| T02 | Field Agent Authentication & Verification Queue | Badge AGT-TS-042 | Next.js routes to Agent Portal | Routed to Agent Portal | **PASSED** | 38ms |
+| T03 | Middleman Applicant Detection & Rejection | Commercial warehouse application | Status flagged REJECTED, access revoked | Flagged as broker; rejected | **PASSED** | 55ms |
+| T04 | Verified Produce Publication with Photo Asset | 2,000kg Tomatoes @ Rs 28/kg | Listing created and visible in marketplace | Created and visible in catalog | **PASSED** | 64ms |
+| T05 | Unverified Farmer Publication Lock | Attempt listing with PENDING status | HTTP 403 Forbidden with alert dialog | Blocked; audit notice displayed | **PASSED** | 29ms |
+| T06 | FastAPI ML Auto-Fill Price Suggestion | Tomato, Bowenpally, 7-day horizon | Suggested rate Rs 27.00 auto-fills form | Populated predicted rate (Rs 27.00) | **PASSED** | 32ms |
+| T07 | Catalog Image Asset Integrity Check | HTTP HEAD across 20 JPEG images | All 20 return HTTP 200 with non-zero bytes | All 20 return 200 OK (0 broken) | **PASSED** | 48ms |
+| T08 | Minimum Produce Order Threshold (2 kg) | Buyer inputs 1 kg order quantity | Clamped to minimum threshold of 2 kg | Clamped to 2 kg threshold | **PASSED** | 18ms |
+| T09 | Stock Cap Enforcement on Wholesale Purchase | Buyer inputs 5,000 kg for 2,000 kg stock | Quantity clamped to available harvest yield | Clamped to 2,000 kg yield | **PASSED** | 16ms |
+| T10 | Cash on Delivery Checkout & Receipt Generation | Customer Name, Address, Phone | Order record created with COD status | Order 503 created with invoice | **PASSED** | 72ms |
+| T11 | Role-Based Tab Route Guarding | Farmer clicks Agent Verification tab | Navigation blocked; login modal displayed | Access blocked; auth modal shown | **PASSED** | 22ms |
+| T12 | User Session Logout & Cache Clearing | Click Logout on Navigation Bar | Session state cleared to guest visitor | State reset to guest visitor | **PASSED** | 19ms |
+
+## Machine Learning Held-Out Validation Metrics
+
+- **Evaluated Model**: Random Forest Regressor (100 estimators, max_depth=20)
+- **Dataset Records**: 92,508 multi-mandi arrival and price records (2018–2026)
+- **Held-Out Test Set**: 20% (18,502 records)
+- **Root Mean Squared Error (RMSE)**: 1.5107 Rs/kg
+- **Mean Absolute Error (MAE)**: 0.9949 Rs/kg
+- **Coefficient of Determination (R²)**: 0.9974 (99.74% variance explained)
+- **Mean Absolute Percentage Error (MAPE)**: 2.45%
+
+## Static Asset & Route Integrity
+
+- Verified 20/20 produce image assets in /public/images/products/: 0 broken or missing images.
+- Verified Next.js dynamic routing across /, /analytics, /farmer, and /agent.
+- Verified FastAPI endpoints /health, /, /predict-price, /compare-price, and /commodities.

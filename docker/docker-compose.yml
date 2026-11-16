@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: smartfarmer_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: smartfarmer_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ../database/seed.sql:/docker-entrypoint-initdb.d/02_seed.sql
+    networks:
+      - smartfarmer_net
+
+  # 2. Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: smartfarmer_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - smartfarmer_net
+
+  # 3. Machine Learning Microservice (FastAPI + XGBoost/Scikit-Learn)
+  ml-service:
+    build:
+      context: ../ml-service
+      dockerfile: Dockerfile
+    container_name: smartfarmer_ml
+    restart: always
+    environment:
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    networks:
+      - smartfarmer_net
+
+  # 4. Java Spring Boot 3 Core Backend
+  backend-spring-boot:
+    build:
+      context: ../backend-spring-boot
+      dockerfile: Dockerfile
+    container_name: smartfarmer_backend
+    restart: always
+    depends_on:
+      - postgres
+      - ml-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/smartfarmer_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgrespassword
+      - ML_SERVICE_URL=http://ml-service:8000
+    ports:
+      - "8080:8080"
+    networks:
+      - smartfarmer_net
+
+  # 5. Next.js Web Frontend
+  web-frontend:
+    build:
+      context: ../web-frontend
+      dockerfile: Dockerfile
+    container_name: smartfarmer_frontend
+    restart: always
+    depends_on:
+      - backend-spring-boot
+      - ml-service
+    environment:
+      - NEXT_PUBLIC_ML_URL=http://localhost:8000
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8080/api
+    ports:
+      - "3000:3000"
+    networks:
+      - smartfarmer_net
+
+networks:
+  smartfarmer_net:
+    driver: bridge
+
+volumes:
+  pgdata:

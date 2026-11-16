@@ -1,0 +1,189 @@
+{
+  "best_model": "RandomForest",
+  "feature_cols": [
+    "commodity_id",
+    "market_id",
+    "category_id",
+    "month",
+    "day_of_week",
+    "sin_doy",
+    "cos_doy",
+    "sin_month",
+    "cos_month",
+    "arrival_quintals",
+    "rainfall_mm",
+    "temperature_c",
+    "demand_index",
+    "lag_1",
+    "lag_7",
+    "lag_14",
+    "lag_30",
+    "rolling_mean_7",
+    "rolling_std_7",
+    "rolling_mean_30"
+  ],
+  "commodities": [
+    "Apple",
+    "Banana",
+    "Cabbage",
+    "Carrot",
+    "Cauliflower",
+    "Green Chilli",
+    "Mango",
+    "Onion",
+    "Potato",
+    "Rice",
+    "Spinach",
+    "Tomato",
+    "Wheat"
+  ],
+  "markets": [
+    "Azadpur (Delhi)",
+    "Bowenpally (Hyderabad)",
+    "Durgapura (Jaipur)",
+    "Kolar (Karnataka)",
+    "Lasalgaon (Maharashtra)",
+    "Vashi (Mumbai)"
+  ],
+  "categories": [
+    "Fruits",
+    "Grains",
+    "Vegetables"
+  ],
+  "commodity_to_id": {
+    "Apple": 0,
+    "Banana": 1,
+    "Cabbage": 2,
+    "Carrot": 3,
+    "Cauliflower": 4,
+    "Green Chilli": 5,
+    "Mango": 6,
+    "Onion": 7,
+    "Potato": 8,
+    "Rice": 9,
+    "Spinach": 10,
+    "Tomato": 11,
+    "Wheat": 12
+  },
+  "market_to_id": {
+    "Azadpur (Delhi)": 0,
+    "Bowenpally (Hyderabad)": 1,
+    "Durgapura (Jaipur)": 2,
+    "Kolar (Karnataka)": 3,
+    "Lasalgaon (Maharashtra)": 4,
+    "Vashi (Mumbai)": 5
+  },
+  "category_to_id": {
+    "Fruits": 0,
+    "Grains": 1,
+    "Vegetables": 2
+  },
+  "metrics": {
+    "xgboost": {
+      "rmse": 1.5291013332565708,
+      "mae": 0.99039269871823,
+      "r2": 0.997365134777257,
+      "mape": 2.414948523258185
+    },
+    "random_forest": {
+      "rmse": 1.510730321852116,
+      "mae": 0.9948894211343298,
+      "r2": 0.9974280663334573,
+      "mape": 2.4531640471124265
+    }
+  },
+  "commodity_stats": {
+    "Apple": {
+      "mean": 113.82,
+      "std": 14.08,
+      "min": 77.06,
+      "max": 155.48,
+      "category": "Fruits"
+    },
+    "Banana": {
+      "mean": 35.67,
+      "std": 4.24,
+      "min": 23.71,
+      "max": 49.32,
+      "category": "Fruits"
+    },
+    "Cabbage": {
+      "mean": 18.27,
+      "std": 2.38,
+      "min": 10.29,
+      "max": 25.25,
+      "category": "Vegetables"
+    },
+    "Carrot": {
+      "mean": 30.4,
+      "std": 4.33,
+      "min": 18.89,
+      "max": 44.22,
+      "category": "Vegetables"
+    },
+    "Cauliflower": {
+      "mean": 24.43,
+      "std": 3.42,
+      "min": 15.85,
+      "max": 34.06,
+      "category": "Vegetables"
+    },
+    "Green Chilli": {
+      "mean": 46.16,
+      "std": 6.9,
+      "min": 26.47,
+      "max": 68.4,
+      "category": "Vegetables"
+    },
+    "Mango": {
+      "mean": 90.27,
+      "std": 17.77,
+      "min": 45.89,
+      "max": 142.22,
+      "category": "Fruits"
+    },
+    "Onion": {
+      "mean": 26.83,
+      "std": 5.56,
+      "min": 13.21,
+      "max": 43.04,
+      "category": "Vegetables"
+    },
+    "Potato": {
+      "mean": 20.45,
+      "std": 2.35,
+      "min": 13.59,
+      "max": 28.11,
+      "category": "Vegetables"
+    },
+    "Rice": {
+      "mean": 43.41,
+      "std": 4.81,
+      "min": 29.77,
+      "max": 60.46,
+      "category": "Grains"
+    },
+    "Spinach": {
+      "mean": 22.68,
+      "std": 3.64,
+      "min": 13.44,
+      "max": 33.28,
+      "category": "Vegetables"
+    },
+    "Tomato": {
+      "mean": 28.25,
+      "std": 5.07,
+      "min": 15.83,
+      "max": 44.26,
+      "category": "Vegetables"
+    },
+    "Wheat": {
+      "mean": 27.93,
+      "std": 3.35,
+      "min": 19.17,
+      "max": 39.7,
+      "category": "Grains"
+    }
+  },
+  "last_trained_date": "2026-11-10 11:26:31"
+}

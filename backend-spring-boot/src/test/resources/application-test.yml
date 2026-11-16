@@ -1,0 +1,33 @@
+# Spring Boot Test Configuration — Uses H2 in-memory database
+# so tests can run without a real PostgreSQL instance.
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+
+  h2:
+    console:
+      enabled: false
+
+# Disable ML service calls during tests
+app:
+  ml-service:
+    url: http://localhost:9999  # Non-existent port — MlClientService has fallback
+
+jwt:
+  secret: test-jwt-secret-key-for-unit-tests-only-32-chars
+  expiration-ms: 86400000
+
+logging:
+  level:
+    com.smartfarmer: WARN
+    org.springframework.security: WARN

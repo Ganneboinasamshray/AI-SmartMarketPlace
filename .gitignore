@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+package-lock.json.backup
+
+# Production builds & cache
+.next/
+out/
+build/
+dist/
+target/
+
+# Python & ML
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+venv/
+.venv/
+env/
+
+# Environment Variables & Secrets
+.env.local
+.env.*.local
+
+# IDE & OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
