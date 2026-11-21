@@ -14,10 +14,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findByFarmerId(Long farmerId);
     List<Product> findByStatus(Product.ProductStatus status);
 
-    @Query("SELECT p FROM Product p WHERE p.status = 'AVAILABLE' AND p.farmer.verificationStatus = 'APPROVED'")
+    @Query("SELECT p FROM Product p WHERE p.status = 'APPROVED' AND p.verifiedByAgent IS NOT NULL")
     List<Product> findVerifiedAvailableProducts();
 
-    @Query("SELECT p FROM Product p WHERE p.status = 'AVAILABLE' AND p.farmer.verificationStatus = 'APPROVED' " +
+    @Query("SELECT p FROM Product p WHERE p.status = 'APPROVED' AND p.verifiedByAgent IS NOT NULL " +
            "AND (:cropName IS NULL OR LOWER(p.cropName) LIKE LOWER(CONCAT('%', :cropName, '%'))) " +
            "AND (:categoryId IS NULL OR p.category.id = :categoryId) " +
            "AND (:isOrganic IS NULL OR p.isOrganic = :isOrganic)")

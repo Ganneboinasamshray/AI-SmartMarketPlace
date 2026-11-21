@@ -64,9 +64,17 @@ public class Product {
     private String farmLocation;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 30)
     @Builder.Default
-    private ProductStatus status = ProductStatus.AVAILABLE;
+    private ProductStatus status = ProductStatus.PENDING_APPROVAL;
+
+    @Column(length = 500)
+    private String agentRemarks;
+
+    @Column(length = 150)
+    private String verifiedByAgent;
+
+    private LocalDateTime verifiedAt;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -74,6 +82,10 @@ public class Product {
     private LocalDateTime updatedAt;
 
     public enum ProductStatus {
+        PENDING_APPROVAL,
+        APPROVED,
+        REJECTED,
+        REQUIRES_CHANGES,
         AVAILABLE,
         LOW_STOCK,
         OUT_OF_STOCK,
@@ -82,6 +94,9 @@ public class Product {
 
     @PrePersist
     protected void onCreate() {
+        if (status == null) {
+            status = ProductStatus.PENDING_APPROVAL;
+        }
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }

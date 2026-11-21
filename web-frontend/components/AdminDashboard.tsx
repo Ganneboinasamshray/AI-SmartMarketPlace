@@ -5,7 +5,7 @@ import {
   Users, 
   ShieldCheck, 
   TrendingUp, 
-  DollarSign, 
+  IndianRupee, 
   Package, 
   UserPlus, 
   UserCheck, 
@@ -20,7 +20,7 @@ export const AdminDashboard: React.FC = () => {
   const [agents, setAgents] = useState([
     { id: 1, name: 'Vikram Rathore', badge: 'AGT-TS-042', region: 'Hyderabad & Telangana Zone', activeAssigned: 3, rating: 4.9 },
     { id: 2, name: 'K. Sridhar', badge: 'AGT-TS-089', region: 'Ranga Reddy Zone (Telangana)', activeAssigned: 1, rating: 4.8 },
-    { id: 3, name: 'Karthik Rao', badge: 'AGT-KA-305', region: 'Kolar and Malur Zone (Karnataka)', activeAssigned: 2, rating: 4.9 }
+    { id: 3, name: 'Karthik Rao', badge: 'AGT-TS-089', region: 'Warangal and Hanumakonda Zone (Telangana)', activeAssigned: 2, rating: 4.9 }
   ]);
 
   const [pendingFarmers, setPendingFarmers] = useState([
@@ -114,7 +114,7 @@ export const AdminDashboard: React.FC = () => {
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-gray-500">Gross Direct GMV</span>
             <div className="p-2 bg-amber-100 text-amber-700 rounded-xl">
-              <DollarSign className="w-5 h-5" />
+              <IndianRupee className="w-5 h-5" />
             </div>
           </div>
           <div className="text-2xl font-extrabold text-gray-900 mt-2">₹48.6 Lakh</div>

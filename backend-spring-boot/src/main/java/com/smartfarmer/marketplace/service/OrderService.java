@@ -50,6 +50,10 @@ public class OrderService {
             Product product = productRepository.findById(itemDto.getProductId())
                     .orElseThrow(() -> new RuntimeException("Product not found: " + itemDto.getProductId()));
 
+            if (product.getStatus() != Product.ProductStatus.APPROVED || product.getVerifiedByAgent() == null) {
+                throw new RuntimeException("Access Denied: Product " + product.getCropName() + " has not been approved by a Field Agent.");
+            }
+
             if (product.getQuantityKg().compareTo(itemDto.getQuantityKg()) < 0) {
                 throw new RuntimeException("Insufficient stock for crop: " + product.getCropName() + ". Available: " + product.getQuantityKg());
             }

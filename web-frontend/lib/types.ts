@@ -1,4 +1,6 @@
-export type UserRole = 'ROLE_FARMER' | 'ROLE_AGENT' | 'ROLE_ADMIN' | 'ROLE_BUYER';
+export type UserRole = 'ROLE_FARMER' | 'ROLE_AGENT' | 'ROLE_BUYER';
+
+export type ListingStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'REQUIRES_CHANGES';
 
 export interface User {
   id: number;
@@ -6,6 +8,12 @@ export interface User {
   fullName: string;
   phoneNumber: string;
   role: UserRole;
+  state: 'Telangana';
+  district?: string;
+  mandal?: string;
+  village?: string;
+  passbookNumber?: string;
+  badgeId?: string;
   verificationStatus?: 'PENDING' | 'ASSIGNED' | 'APPROVED' | 'REJECTED';
 }
 
@@ -21,13 +29,31 @@ export interface Product {
   quantityKg: number;
   minOrderKg: number;
   pricePerKg: number;
-  qualityGrade: 'Grade A' | 'Grade B' | 'Export Quality';
+  unit: string;
+  qualityGrade: 'Grade A' | 'Grade B' | 'Grade C' | 'Export Quality';
   harvestDate: string;
   shelfLifeDays: number;
   isOrganic: boolean;
   imageUrl: string;
+  state: 'Telangana';
+  district: string;
+  mandal: string;
+  village: string;
   farmLocation: string;
-  status: 'AVAILABLE' | 'LOW_STOCK' | 'OUT_OF_STOCK';
+  description?: string;
+
+  // Strict Agent Verification State
+  status: ListingStatus;
+  agentApproved: boolean;
+  agentRemarks?: string;
+  verifiedByAgent?: string;
+  verifiedAt?: string;
+
+  // ML Pricing Insights
+  predictedPrice?: number;
+  recommendedMinPrice?: number;
+  recommendedMaxPrice?: number;
+  mlConfidenceScore?: number;
 }
 
 export interface FarmerProfile {
@@ -36,6 +62,10 @@ export interface FarmerProfile {
   fullName: string;
   email: string;
   phoneNumber: string;
+  state: 'Telangana';
+  district: string;
+  mandal: string;
+  village: string;
   farmName: string;
   farmLocation: string;
   latitude: number;
@@ -52,12 +82,29 @@ export interface VerificationRequest {
   farmerName: string;
   phoneNumber: string;
   farmName: string;
+  state: 'Telangana';
+  district: string;
+  mandal: string;
+  village: string;
   farmLocation: string;
   farmSizeAcres: number;
   primaryCrops: string;
   landDocumentUrl?: string;
   status: 'PENDING' | 'ASSIGNED' | 'APPROVED' | 'REJECTED';
   registeredAt: string;
+}
+
+export interface AgentAuditRecord {
+  id: number;
+  productId: number;
+  cropName: string;
+  farmerName: string;
+  district: string;
+  action: 'APPROVED' | 'REJECTED' | 'REQUIRES_CHANGES';
+  agentName: string;
+  agentBadge: string;
+  timestamp: string;
+  remarks: string;
 }
 
 export interface MLPrediction {

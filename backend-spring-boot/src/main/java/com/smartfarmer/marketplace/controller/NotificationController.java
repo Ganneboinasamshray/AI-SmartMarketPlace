@@ -18,10 +18,13 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/notifications")
-@RequiredArgsConstructor
 public class NotificationController {
 
     private final NotificationRepository notificationRepository;
+
+    public NotificationController(NotificationRepository notificationRepository) {
+        this.notificationRepository = notificationRepository;
+    }
 
     /**
      * GET /api/notifications
@@ -58,7 +61,7 @@ public class NotificationController {
         return notificationRepository.findById(id)
                 .filter(n -> n.getUser().getId().equals(principal.getId()))
                 .map(n -> {
-                    n.setRead(true);
+                    n.setIsRead(true);
                     notificationRepository.save(n);
                     return ResponseEntity.ok(Map.of("message", "Notification marked as read"));
                 })
@@ -74,7 +77,7 @@ public class NotificationController {
             @AuthenticationPrincipal UserPrincipal principal) {
         List<Notification> unread =
                 notificationRepository.findByUserIdAndIsReadFalse(principal.getId());
-        unread.forEach(n -> n.setRead(true));
+        unread.forEach(n -> n.setIsRead(true));
         notificationRepository.saveAll(unread);
         return ResponseEntity.ok(Map.of(
                 "message", "All notifications marked as read",
@@ -90,12 +93,11 @@ public class NotificationController {
     public ResponseEntity<Void> deleteNotification(
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrincipal principal) {
-        return notificationRepository.findById(id)
-                .filter(n -> n.getUser().getId().equals(principal.getId()))
-                .map(n -> {
-                    notificationRepository.delete(n);
-                    return ResponseEntity.<Void>noContent().build();
-                })
-                .orElse(ResponseEntity.<Void>notFound().build());
+        var opt = notificationRepository.findById(id);
+        if (opt.isPresent() && opt.get().getUser().getId().equals(principal.getId())) {
+            notificationRepository.delete(opt.get());
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 }

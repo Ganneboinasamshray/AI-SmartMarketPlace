@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,14 +27,10 @@ public class ProductService {
         Farmer farmer = farmerRepository.findByUserId(farmerUserId)
                 .orElseThrow(() -> new RuntimeException("Farmer profile not found for user: " + farmerUserId));
 
-        // Strict verification gate: Only APPROVED farmers can list
-        if (farmer.getVerificationStatus() != Farmer.VerificationStatus.APPROVED) {
-            throw new RuntimeException("Access Denied: Only physically verified farmers can list produce on the marketplace. Current status: " + farmer.getVerificationStatus());
-        }
-
         ProductCategory category = categoryRepository.findById(req.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found: " + req.getCategoryId()));
 
+        // Strict approval workflow: ALL newly added products MUST start in PENDING_APPROVAL
         Product product = Product.builder()
                 .farmer(farmer)
                 .category(category)
@@ -48,14 +45,16 @@ public class ProductService {
                 .isOrganic(req.getIsOrganic() != null ? req.getIsOrganic() : false)
                 .imageUrl(req.getImageUrl())
                 .farmLocation(req.getFarmLocation() != null ? req.getFarmLocation() : farmer.getFarmLocation())
-                .status(Product.ProductStatus.AVAILABLE)
+                .status(Product.ProductStatus.PENDING_APPROVAL)
+                .verifiedByAgent(null)
+                .verifiedAt(null)
                 .build();
 
         Product saved = productRepository.save(product);
 
-        // Record ML Pricing Audit
+        // Record ML Pricing Audit (Telangana Mandi)
         try {
-            Map<String, Object> comp = mlClientService.comparePrice(req.getCropName(), "Azadpur (Delhi)", req.getPricePerKg());
+            Map<String, Object> comp = mlClientService.comparePrice(req.getCropName(), "Bowenpally (Hyderabad)", req.getPricePerKg());
             FarmerPriceListing listingAudit = FarmerPriceListing.builder()
                     .product(saved)
                     .farmer(farmer)
@@ -70,6 +69,45 @@ public class ProductService {
         } catch (Exception ignored) {}
 
         return mapToResponse(saved);
+    }
+
+    public List<ProductResponse> getPendingApprovalProducts() {
+        return productRepository.findByStatus(Product.ProductStatus.PENDING_APPROVAL).stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public ProductResponse approveProduct(Long productId, String agentIdentity, String remarks) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
+        product.setStatus(Product.ProductStatus.APPROVED);
+        product.setVerifiedByAgent(agentIdentity);
+        product.setVerifiedAt(LocalDateTime.now());
+        product.setAgentRemarks(remarks);
+        return mapToResponse(productRepository.save(product));
+    }
+
+    @Transactional
+    public ProductResponse rejectProduct(Long productId, String agentIdentity, String reason) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
+        product.setStatus(Product.ProductStatus.REJECTED);
+        product.setVerifiedByAgent(agentIdentity);
+        product.setVerifiedAt(LocalDateTime.now());
+        product.setAgentRemarks(reason);
+        return mapToResponse(productRepository.save(product));
+    }
+
+    @Transactional
+    public ProductResponse requestProductChanges(Long productId, String agentIdentity, String instructions) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
+        product.setStatus(Product.ProductStatus.REQUIRES_CHANGES);
+        product.setVerifiedByAgent(agentIdentity);
+        product.setVerifiedAt(LocalDateTime.now());
+        product.setAgentRemarks(instructions);
+        return mapToResponse(productRepository.save(product));
     }
 
     public List<ProductResponse> getFarmerProducts(Long farmerUserId) {
@@ -94,6 +132,7 @@ public class ProductService {
     }
 
     private ProductResponse mapToResponse(Product p) {
+        boolean isApproved = p.getStatus() == Product.ProductStatus.APPROVED && p.getVerifiedByAgent() != null;
         return ProductResponse.builder()
                 .id(p.getId())
                 .farmerId(p.getFarmer().getId())
@@ -111,7 +150,10 @@ public class ProductService {
                 .isOrganic(p.getIsOrganic())
                 .imageUrl(p.getImageUrl())
                 .status(p.getStatus().name())
-                .farmerVerified(p.getFarmer().getVerificationStatus() == Farmer.VerificationStatus.APPROVED)
+                .agentApproved(isApproved)
+                .agentRemarks(p.getAgentRemarks())
+                .verifiedByAgent(p.getVerifiedByAgent())
+                .farmerVerified(isApproved)
                 .farmerPhone(p.getFarmer().getUser().getPhoneNumber())
                 .build();
     }

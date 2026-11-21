@@ -25,6 +25,15 @@ env/
 .env.local
 .env.*.local
 
+# Databases & local caches
+*.db
+*.db-wal
+*.db-shm
+*.tsbuildinfo
+backend-spring-boot/classpath.txt
+backend-spring-boot/javac_args.txt
+backend-spring-boot/sources.txt
+
 # IDE & OS files
 .vscode/
 .idea/

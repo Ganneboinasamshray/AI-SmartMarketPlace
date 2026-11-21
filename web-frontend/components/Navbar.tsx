@@ -2,24 +2,18 @@
 
 import React from 'react';
 import { User, UserRole } from '../lib/types';
-import { 
-  Sprout, 
-  ShoppingBag, 
-  ShieldCheck, 
-  BarChart3, 
+import {
+  Sprout,
+  ShoppingBag,
+  ShieldCheck,
   ShoppingCart,
-  LogIn,
-  LogOut,
-  UserCheck
+  LogOut
 } from 'lucide-react';
 
 interface NavbarProps {
   currentUser: User | null;
-  currentRole: UserRole;
-  activeTab: string;
+  currentRole: UserRole | null;
   cartCount: number;
-  onSelectTab: (tab: string) => void;
-  onSwitchRole: (role: UserRole) => void;
   onOpenCart: () => void;
   onOpenAuth: (roleHint?: UserRole) => void;
   onLogout: () => void;
@@ -28,166 +22,152 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   currentUser,
   currentRole,
-  activeTab,
   cartCount,
-  onSelectTab,
-  onSwitchRole,
   onOpenCart,
   onOpenAuth,
   onLogout
 }) => {
   return (
-    <header className="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-xs">
+    <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          
-          {/* Logo & Brand */}
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => onSelectTab('marketplace')}>
-            <div className="bg-emerald-600 text-white p-2 rounded-xl shadow-md">
-              <Sprout className="w-6 h-6" />
+          {/* Logo & Portal Identity */}
+          <div className="flex items-center space-x-3">
+            <div className={`p-2 rounded-2xl shadow-xs text-white ${
+              currentRole === 'ROLE_FARMER' ? 'bg-emerald-600' :
+              currentRole === 'ROLE_AGENT' ? 'bg-blue-600' :
+              currentRole === 'ROLE_BUYER' ? 'bg-amber-600' : 'bg-emerald-700'
+            }`}>
+              {currentRole === 'ROLE_FARMER' ? <Sprout className="w-6 h-6" /> :
+               currentRole === 'ROLE_AGENT' ? <ShieldCheck className="w-6 h-6" /> :
+               currentRole === 'ROLE_BUYER' ? <ShoppingBag className="w-6 h-6" /> :
+               <Sprout className="w-6 h-6" />}
             </div>
+
             <div>
-              <span className="text-xl font-black text-gray-900 tracking-tight flex items-center gap-1.5">
-                Smart Farmer <span className="text-emerald-600">Marketplace</span>
+              <span className="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center gap-1.5">
+                AI Smart{' '}
+                <span className={
+                  currentRole === 'ROLE_FARMER' ? 'text-emerald-600' :
+                  currentRole === 'ROLE_AGENT' ? 'text-blue-600' :
+                  currentRole === 'ROLE_BUYER' ? 'text-amber-600' : 'text-emerald-700'
+                }>
+                  Marketplace
+                </span>
+
+                {currentRole === 'ROLE_FARMER' && (
+                  <span className="ml-1 text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-200 hidden sm:inline-block">
+                    Farmer Portal
+                  </span>
+                )}
+                {currentRole === 'ROLE_AGENT' && (
+                  <span className="ml-1 text-[10px] font-black uppercase tracking-wider bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full border border-blue-200 hidden sm:inline-block">
+                    Agent Portal
+                  </span>
+                )}
+                {currentRole === 'ROLE_BUYER' && (
+                  <span className="ml-1 text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full border border-amber-200 hidden sm:inline-block">
+                    Buyer Portal
+                  </span>
+                )}
               </span>
-              <p className="text-[11px] text-gray-500 font-medium hidden sm:block">
-                Direct Farm-to-Buyer • Telangana & Karnataka • Zero Middlemen
+
+              <p className="text-[11px] text-slate-500 font-medium hidden md:block">
+                Direct Agriculture Trading • Strictly Telangana 33 Districts • Zero Intermediaries
               </p>
             </div>
           </div>
 
-          {/* Navigation Tabs (Strictly Role-Based) */}
-          <nav className="hidden md:flex space-x-1">
-            {/* Marketplace is visible to Everyone */}
-            <button
-              onClick={() => onSelectTab('marketplace')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-colors ${
-                activeTab === 'marketplace'
-                  ? 'bg-emerald-50 text-emerald-700'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              <ShoppingBag className="w-4 h-4" />
-              Produce Marketplace
-            </button>
-
-            {/* Market Analytics & ML */}
-            <button
-              onClick={() => onSelectTab('analytics')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-colors ${
-                activeTab === 'analytics'
-                  ? 'bg-emerald-50 text-emerald-700'
-                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
-              }`}
-            >
-              <BarChart3 className="w-4 h-4" />
-              ML Price Analytics
-            </button>
-
-            {/* FARMER DASHBOARD — Only accessible to Farmers (Hidden from Agents) */}
-            {currentRole === 'ROLE_FARMER' && (
-              <button
-                onClick={() => onSelectTab('farmer')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-colors ${
-                  activeTab === 'farmer'
-                    ? 'bg-emerald-600 text-white shadow-xs'
-                    : 'text-emerald-700 bg-emerald-50 hover:bg-emerald-100'
-                }`}
-              >
-                <Sprout className="w-4 h-4" />
-                Farmer Dashboard
-              </button>
-            )}
-
-            {/* AGENT DASHBOARD — Only accessible to Agents (Hidden from Farmers) */}
-            {currentRole === 'ROLE_AGENT' && (
-              <button
-                onClick={() => onSelectTab('agent')}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-colors ${
-                  activeTab === 'agent'
-                    ? 'bg-blue-600 text-white shadow-xs'
-                    : 'text-blue-700 bg-blue-50 hover:bg-blue-100'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4" />
-                Agent Verification
-              </button>
-            )}
-          </nav>
-
-          {/* Right Controls: Role Badge, Cart, Logins */}
+          {/* Right Header Controls */}
           <div className="flex items-center space-x-3">
-            
-            {/* Cart Button */}
-            <button
-              onClick={onOpenCart}
-              className="relative p-2 text-gray-700 hover:text-emerald-600 hover:bg-gray-100 rounded-full transition"
-              title="View Cart"
-            >
-              <ShoppingCart className="w-5 h-5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-pulse">
-                  {cartCount}
-                </span>
-              )}
-            </button>
+            {!currentUser && (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => onOpenAuth('ROLE_FARMER')}
+                  className="flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-2 rounded-xl transition"
+                >
+                  <Sprout className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="hidden sm:inline">Farmer Login</span>
+                  <span className="sm:hidden">Farmer</span>
+                </button>
 
-            {/* Authenticated User Status & Logout */}
-            {currentUser ? (
-              <div className="flex items-center space-x-2.5 pl-2 border-l border-gray-200">
+                <button
+                  onClick={() => onOpenAuth('ROLE_AGENT')}
+                  className="flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold px-3 py-2 rounded-xl transition"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                  <span className="hidden sm:inline">Agent Login</span>
+                  <span className="sm:hidden">Agent</span>
+                </button>
+
+                <button
+                  onClick={() => onOpenAuth('ROLE_BUYER')}
+                  className="flex items-center gap-1.5 bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-xs transition"
+                >
+                  <ShoppingBag className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Buyer Login</span>
+                  <span className="sm:hidden">Buyer</span>
+                </button>
+              </div>
+            )}
+
+            {currentUser && currentRole === 'ROLE_BUYER' && (
+              <button
+                onClick={onOpenCart}
+                className="relative p-2.5 text-slate-700 hover:text-amber-600 hover:bg-amber-50 rounded-2xl transition border border-slate-200"
+                title="View Shopping Cart"
+              >
+                <ShoppingCart className="w-5 h-5" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 bg-amber-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {currentUser && (
+              <div className="flex items-center space-x-3 pl-3 border-l border-slate-200">
                 <div className="flex flex-col text-right hidden sm:flex">
-                  <span className="text-xs font-bold text-gray-900 truncate max-w-[140px]">
+                  <span className="text-xs font-bold text-slate-900 truncate max-w-[150px]">
                     {currentUser.fullName}
                   </span>
-                  <span className={`text-[10px] font-bold uppercase tracking-wider ${
-                    currentUser.role === 'ROLE_FARMER' ? 'text-emerald-600' :
-                    currentUser.role === 'ROLE_AGENT' ? 'text-blue-600' : 'text-amber-600'
+                  <span className={`text-[10px] font-bold uppercase tracking-wider flex items-center justify-end gap-1 ${
+                    currentRole === 'ROLE_FARMER' ? 'text-emerald-600' :
+                    currentRole === 'ROLE_AGENT' ? 'text-blue-600' : 'text-amber-600'
                   }`}>
-                    {currentUser.role === 'ROLE_FARMER' ? '🌾 Verified Farmer' :
-                     currentUser.role === 'ROLE_AGENT' ? '🛡️ Field Agent' : '🛍️ Buyer'}
+                    {currentRole === 'ROLE_FARMER' && (
+                      <>
+                        <Sprout className="w-3 h-3" />
+                        <span>Telangana Farmer</span>
+                      </>
+                    )}
+                    {currentRole === 'ROLE_AGENT' && (
+                      <>
+                        <ShieldCheck className="w-3 h-3" />
+                        <span>Officer ({currentUser.badgeId})</span>
+                      </>
+                    )}
+                    {currentRole === 'ROLE_BUYER' && (
+                      <>
+                        <ShoppingBag className="w-3 h-3" />
+                        <span>Verified Buyer</span>
+                      </>
+                    )}
                   </span>
                 </div>
 
                 <button
                   onClick={onLogout}
-                  className="p-2 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-xl transition flex items-center gap-1 text-xs font-bold"
-                  title="Logout"
+                  className="py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl transition flex items-center gap-1.5 text-xs font-bold border border-rose-200 cursor-pointer"
+                  title="Logout and exit to landing page"
                 >
                   <LogOut className="w-4 h-4" />
-                  <span className="hidden lg:inline">Logout</span>
-                </button>
-              </div>
-            ) : (
-              /* Dedicated Logins when not logged in */
-              <div className="flex items-center gap-1.5">
-                <button
-                  onClick={() => onOpenAuth('ROLE_FARMER')}
-                  className="flex items-center gap-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold px-3 py-1.5 rounded-xl transition"
-                >
-                  <Sprout className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Farmer Login</span>
-                </button>
-
-                <button
-                  onClick={() => onOpenAuth('ROLE_AGENT')}
-                  className="flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-bold px-3 py-1.5 rounded-xl transition"
-                >
-                  <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-                  <span>Agent Login</span>
-                </button>
-
-                <button
-                  onClick={() => onOpenAuth('ROLE_BUYER')}
-                  className="flex items-center gap-1 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold px-3 py-1.5 rounded-xl shadow-xs transition"
-                >
-                  <LogIn className="w-3.5 h-3.5" />
-                  <span>Buyer</span>
+                  <span className="hidden sm:inline">Logout</span>
                 </button>
               </div>
             )}
-
           </div>
-
         </div>
       </div>
     </header>

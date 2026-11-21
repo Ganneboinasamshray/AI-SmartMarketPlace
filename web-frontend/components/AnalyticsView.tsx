@@ -36,12 +36,12 @@ export const AnalyticsView: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [prediction, setPrediction] = useState<MLPrediction | null>(null);
 
-  // Regional market comparison for Telangana & Karnataka
+  // Regional market comparison across Telangana Mandis
   const marketComparisons = [
     { market: 'Bowenpally (Hyd, TS)', currentPrice: 28.0, predicted7d: 28.8, arrival: 2100 },
     { market: 'Gudimalkapur (Hyd, TS)', currentPrice: 28.5, predicted7d: 29.1, arrival: 1850 },
-    { market: 'Kolar (Karnataka)', currentPrice: 26.5, predicted7d: 27.2, arrival: 2900 },
-    { market: 'Bangalore APMC (KA)', currentPrice: 27.0, predicted7d: 27.6, arrival: 2400 },
+    { market: 'Warangal Laxmipuram (TS)', currentPrice: 27.5, predicted7d: 28.2, arrival: 2600 },
+    { market: 'Karimnagar Market Yard (TS)', currentPrice: 27.0, predicted7d: 27.6, arrival: 2400 },
     { market: 'Gudimalkapur (Hyderabad Mandi)', currentPrice: 28.5, predicted7d: 29.2, arrival: 3200 }
   ];
 
@@ -122,7 +122,7 @@ export const AnalyticsView: React.FC = () => {
             >
               <option value="Bowenpally (Hyderabad)">Bowenpally Mandi (Hyderabad, TS)</option>
               <option value="Gudimalkapur (Hyderabad)">Gudimalkapur Mandi (Hyderabad, TS)</option>
-              <option value="Kolar (Karnataka)">Kolar APMC (Karnataka)</option>
+              <option value="Warangal (Laxmipuram)">Warangal Laxmipuram Mandi (Telangana)</option>
               <option value="Bowenpally (Hyderabad)">Bowenpally Mandi (Hyderabad Benchmark)</option>
             </select>
           </div>

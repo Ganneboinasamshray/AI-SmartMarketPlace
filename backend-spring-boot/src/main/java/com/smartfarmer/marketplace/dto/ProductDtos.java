@@ -66,8 +66,20 @@ public class ProductDtos {
         private Boolean isOrganic;
         private String imageUrl;
         private String status;
+        private Boolean agentApproved;
+        private String agentRemarks;
+        private String verifiedByAgent;
         private Boolean farmerVerified;
         private String farmerPhone;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ProductApprovalRequest {
+        private String remarks;
     }
 
     @Getter

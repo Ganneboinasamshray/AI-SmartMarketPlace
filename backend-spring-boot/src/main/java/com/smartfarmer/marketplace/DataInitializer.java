@@ -101,7 +101,7 @@ public class DataInitializer implements CommandLineRunner {
         Farmer verifiedFarmer = farmerRepository.save(Farmer.builder()
                 .user(farmerUser1)
                 .farmName("Green Valley Organic Agro")
-                .farmLocation("Kolar District, Karnataka")
+                .farmLocation("Shamirpet, Medchal-Malkajgiri, Telangana")
                 .latitude(BigDecimal.valueOf(13.1367))
                 .longitude(BigDecimal.valueOf(78.1291))
                 .farmSizeAcres(BigDecimal.valueOf(8.5))
@@ -156,8 +156,9 @@ public class DataInitializer implements CommandLineRunner {
                 .shelfLifeDays(7)
                 .isOrganic(true)
                 .imageUrl("https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=600")
-                .farmLocation("Kolar District, Karnataka")
-                .status(Product.ProductStatus.AVAILABLE)
+                .farmLocation("Shamirpet, Medchal-Malkajgiri, Telangana")
+                .status(Product.ProductStatus.APPROVED)
+                .verifiedByAgent("Vikram Rathore (AGT-TS-042)")
                 .build());
 
         Product potato = productRepository.save(Product.builder()
@@ -173,8 +174,9 @@ public class DataInitializer implements CommandLineRunner {
                 .shelfLifeDays(45)
                 .isOrganic(false)
                 .imageUrl("https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600")
-                .farmLocation("Kolar District, Karnataka")
-                .status(Product.ProductStatus.AVAILABLE)
+                .farmLocation("Shamirpet, Medchal-Malkajgiri, Telangana")
+                .status(Product.ProductStatus.APPROVED)
+                .verifiedByAgent("Vikram Rathore (AGT-TS-042)")
                 .build());
 
         Product carrot = productRepository.save(Product.builder()
@@ -190,8 +192,9 @@ public class DataInitializer implements CommandLineRunner {
                 .shelfLifeDays(14)
                 .isOrganic(true)
                 .imageUrl("https://images.unsplash.com/photo-1598170845058-32b9d6a5c317?w=600")
-                .farmLocation("Kolar District, Karnataka")
-                .status(Product.ProductStatus.AVAILABLE)
+                .farmLocation("Shamirpet, Medchal-Malkajgiri, Telangana")
+                .status(Product.ProductStatus.APPROVED)
+                .verifiedByAgent("Vikram Rathore (AGT-TS-042)")
                 .build());
 
         // 8. Historical Baseline Data Points
