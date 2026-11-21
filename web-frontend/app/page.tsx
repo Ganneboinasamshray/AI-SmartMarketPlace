@@ -51,7 +51,7 @@ const INITIAL_ORDERS: Order[] = [
     items: [
       {
         productId: 2,
-        cropName: 'Capsicum (Bell Pepper)',
+        cropName: 'Capsicum',
         quantityKg: 25,
         unitPrice: 46.0,
         subtotal: 1150.0
@@ -460,7 +460,7 @@ export default function Home() {
             Field Agent Physical Land Audit • RandomForest Regressor Price Forecasting • Strictly Telangana 33 Districts • Zero Intermediaries
           </p>
           <p className="text-[11px] text-slate-400">
-            Final-Year B.Tech Capstone Project • SR University
+            Warangal
           </p>
         </div>
       </footer>

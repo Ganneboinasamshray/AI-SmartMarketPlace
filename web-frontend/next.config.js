@@ -5,14 +5,16 @@ const nextConfig = {
     domains: ['images.unsplash.com', 'images.pexels.com', 'via.placeholder.com'],
   },
   async rewrites() {
+    const mlUrl = process.env.NEXT_PUBLIC_ML_URL || 'http://localhost:8000';
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8081';
     return [
       {
         source: '/api-ml/:path*',
-        destination: 'http://localhost:8000/:path*',
+        destination: mlUrl + '/:path*',
       },
       {
         source: '/api-backend/:path*',
-        destination: 'http://localhost:8081/api/:path*',
+        destination: backendUrl + '/api/:path*',
       },
     ];
   },

@@ -2,6 +2,8 @@
 
 > **Empowering genuine farmers with direct-to-buyer sales, agent physical verification, and ML-driven agricultural price forecasting — eliminating middlemen from the Indian farm supply chain.**
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FGanneboinasamshray%2FAI-SmartMarketPlace&root-directory=web-frontend)
+
 ---
 
 ## 📌 Project Overview
